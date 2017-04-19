@@ -23,6 +23,14 @@ use services::crypto::wrappers::bn::BigNumber;
 
 use std::collections::HashMap;
 use std::rc::Rc;
+extern crate amcl;
+use self::amcl::ed25519::ecp::ECP;
+use self::amcl::ed25519::rom::{CURVE_GX, CURVE_GY, CURVE_ORDER};
+use self::amcl::ed25519::big::BIG;
+use self::amcl::rand::RAND;
+extern crate rand;
+use self::rand::os::{OsRng};
+use self::rand::Rng;
 
 pub struct Issuer {
 
@@ -260,6 +268,68 @@ mod tests {
         let e = BigNumber::from_dec("259344723055062059907025491480697571938277889515152306249728583105665800713306759149981690559193987143012367913206299323899696942213235956742930214202955935602153431795703076242907").unwrap();
         let result = BigNumber::from_dec("18970881790876593286488783486386867538450674270137197011105008151201183300028283403854725282778638150217936721942434319741164063687946275930536223863520768657672755664180955901543160149915323325151339912941454195063854083578091043058101001054089316795088554097754632405106453701959655043761308676687984722831097067744306280339099944309055300662730322057853217855619342132319369757252485139011180518031078822262681093763592682724354563150664662385847044702450408149239372444565988153918412684418519832197112374827438788434448252992414094101094582772269873015514685057917124494501480003311040042093731740782916169155664").unwrap();
         assert_eq!(result, Issuer::_sign(&public_key, &secret_key, &context_attribute, &attributes, &v, &u, &e).unwrap());
+    }
+
+    #[test]
+    fn ecp_test() {
+        /// RandModOrder returns a random element in 0, ..., GroupOrder-1
+        fn random_mod_order(group_order: &mut BIG) -> BIG {
+            let mut seed: [u8; 32] = [0; 32];
+            let mut os_rng = OsRng::new().unwrap();
+            os_rng.fill_bytes(&mut seed);
+
+            //Initialize rng with real entropy from some external source
+            let mut rng = RAND::new();
+            rng.clean();
+            rng.seed(32,&seed);
+            BIG::randomnum(group_order, &mut rng)
+        }
+
+        /// Generator of Group G1
+        let int1 = BIG::new_ints(&CURVE_GX);
+        let int2 = BIG::new_ints(&CURVE_GY);
+        let mut gen_g1 = ECP::new_bigs(&int1, &int2);
+        println!("generator_g1: {}", gen_g1.tostring());
+
+        /// Order of the groups
+        let mut group_order = BIG::new_ints(&CURVE_ORDER);
+        println!("group_order: {}", group_order.tostring());
+
+        /// random element in 0, ..., GroupOrder-1
+        let mut x = random_mod_order(&mut group_order);
+        println!("random element: {}", x.tostring());
+
+        /// first random element from group G1
+        let mut p = gen_g1.mul(&mut x);
+        println!("first random element from group G1: {}", p.tostring());
+
+        /// second random element from group G1
+        let mut x = random_mod_order(&mut group_order);
+        let mut q = gen_g1.mul(&mut x);
+        println!("second random element from group G1: {}", q.tostring());
+
+        /// Sum
+        p.add(&mut q);
+        println!("sum: {}", p.tostring());
+
+        /// Sub
+        p.sub(&mut q);
+        println!("sub: {}", p.tostring());
+
+        /// Pow
+        let mut w = p.mul(&mut x);
+        println!("pow: {}", w.tostring());
+
+        /// Inverse
+        /// invmodp
+        let mut a = BIG::frombytes(&[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 1, 86, 141]);
+        println!("a: {}", a.tostring());
+        let mut n = BIG::frombytes(&[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 13, 146, 229]);
+        println!("n: {}", n.tostring());
+        a.invmodp(&n);
+        println!("a: {}", a.tostring());
+
+
     }
 }
 

@@ -26,6 +26,9 @@ path = "src/main.rs"
 default = ["bn_openssl"]
 bn_openssl = ["openssl", "int_traits"]
 
+[dependencies.amcl]
+path = "amcl"
+
 [dependencies]
 int_traits = { version = "0.1.1", optional = true }
 env_logger = "0.4.2"

@@ -1,0 +1,9 @@
+[package]
+name = "amcl"
+version = "0.1.0"
+authors = ["Evgeniy Razinkov <evgeniy.razinkov@dsr-company.com>"]
+
+[lib]
+name = "amcl"
+path = "lib.rs"
+
