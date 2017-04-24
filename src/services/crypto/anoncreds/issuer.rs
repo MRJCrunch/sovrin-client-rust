@@ -329,11 +329,20 @@ mod tests {
         a.invmodp(&n);
         println!("a: {}", a.tostring());
 
+
+        /// modneg   -13 % 19 = 6
         println!("-----------------------");
         let mut b = BIG::frombytes(&[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 13]);
         let n = BIG::frombytes(&[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 19]);
         let mut c = BIG::modneg(&mut b, &n);
         println!("{}", c.tostring());
+
+        /// neg
+        let mut x = random_mod_order(&mut group_order);
+        let mut p = gen_g1.mul(&mut x);
+        println!("before neg: {}", p.tostring());
+        p.neg();
+        println!("after neg: {}", p.tostring());
     }
 }
 
