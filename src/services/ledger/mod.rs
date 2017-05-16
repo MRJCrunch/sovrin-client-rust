@@ -7,39 +7,39 @@ impl LedgerService {
         LedgerService {}
     }
 
-    pub fn build_get_ddo_request() -> String {
+    pub fn build_get_ddo_request(&self) -> String {
         "".to_string()
     }
 
-    pub fn build_attrib_request() -> String {
+    pub fn build_attrib_request(&self) -> String {
         "".to_string()
     }
 
-    pub fn build_get_attrib_request() -> String {
+    pub fn build_get_attrib_request(&self) -> String {
         "".to_string()
     }
 
-    pub fn build_get_nym_request() -> String {
+    pub fn build_get_nym_request(&self) -> String {
         "".to_string()
     }
 
-    pub fn build_schema_request() -> String {
+    pub fn build_schema_request(&self) -> String {
         "".to_string()
     }
 
-    pub fn build_get_schema_request() -> String {
+    pub fn build_get_schema_request(&self) -> String {
         "".to_string()
     }
 
-    pub fn build_claim_def_request() -> String {
+    pub fn build_claim_def_request(&self) -> String {
         "".to_string()
     }
 
-    pub fn build_get_claim_def_request() -> String {
+    pub fn build_get_claim_def_request(&self) -> String {
         "".to_string()
     }
 
-    pub fn build_node_request() -> String {
+    pub fn build_node_request(&self) -> String {
         "".to_string()
     }
 }
