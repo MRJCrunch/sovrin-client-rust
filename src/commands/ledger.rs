@@ -141,15 +141,15 @@ impl LedgerCommandExecutor {
             }
             LedgerCommand::BuildClaimDefRequest(submitter_did, xref, data, cb) => {
                 info!(target: "ledger_command_executor", "BuildClaimDefRequest command received");
-                self.build_issuer_key_request(&submitter_did, &xref, &data, cb);
+                self.build_claim_def_request(&submitter_did, &xref, &data, cb);
             }
             LedgerCommand::BuildGetClaimDefRequest(submitter_did, xref, cb) => {
                 info!(target: "ledger_command_executor", "BuildGetClaimDefRequest command received");
-                self.build_get_issuer_key_request(&submitter_did, &xref, cb);
+                self.build_get_claim_def_request(&submitter_did, &xref, cb);
             }
             LedgerCommand::BuildNodeRequest(submitter_did, target_did, data, cb) => {
                 info!(target: "ledger_command_executor", "BuildNodeRequest command received");
-                self.build_node_key_request(&submitter_did, &target_did, &data, cb);
+                self.build_node_request(&submitter_did, &target_did, &data, cb);
             }
         };
     }
@@ -230,7 +230,7 @@ impl LedgerCommandExecutor {
         cb(Ok("".to_string()));
     }
 
-    fn build_issuer_key_request(&self,
+    fn build_claim_def_request(&self,
                                 submitter_did: &str,
                                 xref: &str,
                                 data: &str,
@@ -238,14 +238,14 @@ impl LedgerCommandExecutor {
         cb(Ok("".to_string()));
     }
 
-    fn build_get_issuer_key_request(&self,
+    fn build_get_claim_def_request(&self,
                                     submitter_did: &str,
                                     xref: &str,
                                     cb: Box<Fn(Result<String, LedgerError>) + Send>) {
         cb(Ok("".to_string()));
     }
 
-    fn build_node_key_request(&self,
+    fn build_node_request(&self,
                               submitter_did: &str,
                               target_did: &str,
                               data: &str,
