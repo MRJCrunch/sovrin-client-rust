@@ -25,8 +25,12 @@ use std::collections::HashMap;
 use std::rc::Rc;
 extern crate amcl;
 use self::amcl::ed25519::ecp::ECP;
+use self::amcl::bn254::ecp2::ECP2;
+use self::amcl::bn254::fp2::FP2;
 use self::amcl::ed25519::rom::{CURVE_GX, CURVE_GY, CURVE_ORDER};
+use self::amcl::bn254::rom::{CURVE_PXA, CURVE_PXB, CURVE_PYA, CURVE_PYB};
 use self::amcl::ed25519::big::BIG;
+use self::amcl::bn254::big::{BIG as FBIG};
 use self::amcl::rand::RAND;
 extern crate rand;
 use self::rand::os::{OsRng};
@@ -290,6 +294,18 @@ mod tests {
         let int2 = BIG::new_ints(&CURVE_GY);
         let mut gen_g1 = ECP::new_bigs(&int1, &int2);
         println!("generator_g1: {}", gen_g1.tostring());
+
+        /// Generator of the Group G2
+        let int1 = FBIG::new_ints(&CURVE_PXA);
+        let int2 = FBIG::new_ints(&CURVE_PXB);
+        let int3 = FBIG::new_ints(&CURVE_PYA);
+        let int4 = FBIG::new_ints(&CURVE_PYB);
+
+        let point_x = FP2::new_bigs(&int1, &int2);
+        let point_y = FP2::new_bigs(&int3, &int4);
+
+        let mut gen_g2 = ECP2::new_fp2s(&point_x, &point_y);
+        println!("generator_g2: {}", gen_g2.tostring());
 
         /// Order of the groups
         let mut group_order = BIG::new_ints(&CURVE_ORDER);
